@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Epi 2×2 | Calculadora epidemiológica</title>
+  <meta name="description" content="Calculadora epidemiológica para tablas de contingencia 2×2: RR, OR, RA e intervalos de confianza." />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-block">
+        <span class="ecosystem">Laboratorio de Sistemas Porcícolas</span>
+        <h1>Epi 2×2</h1>
+        <p>Calculadora epidemiológica para tablas de contingencia</p>
+      </div>
+      <div class="author-block">
+        <span>Autor</span>
+        <strong>Alberto Jorge Galindo-Barboza</strong>
+        <a href="https://aljogaba.github.io/" target="_blank" rel="noopener">Perfil profesional</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="hero-card">
+      <div>
+        <span class="tag">v0.2.0-dev</span>
+        <h2>Medidas de asociación y riesgo en una tabla 2 × 2</h2>
+        <p>
+          Captura los cuatro conteos de una tabla de contingencia para estimar riesgo relativo,
+          razón de momios, riesgo atribuible e intervalos de confianza al 95 % y 99 %.
+          La matriz a-b-c-d permanece fija; la clave está en nombrar correctamente la categoría superior e inferior.
+        </p>
+      </div>
+      <div class="hero-note">
+        <strong>Uso previsto</strong>
+        <span>Apoyo rápido para análisis epidemiológico descriptivo, docencia y revisión de factores asociados.</span>
+      </div>
+    </section>
+
+    <section class="workspace-grid">
+      <section class="panel input-panel" aria-labelledby="input-title">
+        <div class="panel-heading">
+          <div class="section-number">01</div>
+          <div>
+            <h2 id="input-title">Entradas</h2>
+            <p>Define evento, variable evaluada, categorías comparadas y conteos de la tabla 2 × 2.</p>
+          </div>
+        </div>
+
+        <div class="mode-card">
+          <div class="mode-switch" role="group" aria-label="Modo de captura">
+            <button id="basicMode" type="button" class="mode-button active" data-mode="basic">Modo básico</button>
+            <button id="advancedMode" type="button" class="mode-button" data-mode="advanced">Modo avanzado</button>
+          </div>
+          <div id="basicHelp" class="coding-help">
+            <strong>Lectura básica:</strong> la fila superior compara una categoría de la variable contra la fila inferior. No asuma que siempre es “factor de riesgo”; puede ser una práctica protectora.
+          </div>
+          <div id="advancedHelp" class="coding-help hidden">
+            <strong>Estructura fija:</strong> a = categoría superior/evento sí; b = categoría superior/evento no; c = categoría inferior/evento sí; d = categoría inferior/evento no. No cambie la matriz para forzar el resultado.
+          </div>
+        </div>
+
+        <div class="two-col-form label-form">
+          <label>
+            <span>Evento / enfermedad</span>
+            <input id="eventName" type="text" value="PRRS" />
+          </label>
+          <label>
+            <span>Variable evaluada</span>
+            <input id="variableName" type="text" value="Desinfección" />
+          </label>
+          <label>
+            <span>Categoría superior: fila a-b</span>
+            <input id="upperCategory" type="text" value="Desinfección: sí" />
+          </label>
+          <label>
+            <span>Categoría inferior: fila c-d</span>
+            <input id="lowerCategory" type="text" value="Desinfección: no" />
+          </label>
+        </div>
+
+        <div class="coding-summary" id="codingSummary">
+          Se compara la categoría superior contra la inferior.
+        </div>
+
+        <div class="table-card">
+          <div class="table-title">Tabla de contingencia</div>
+          <div class="contingency-table" role="group" aria-label="Tabla 2 por 2">
+            <div class="corner"></div>
+            <div class="col-header event-yes">Evento sí</div>
+            <div class="col-header event-no">Evento no</div>
+
+            <div class="row-header factor-yes">Categoría superior</div>
+            <label class="cell-input">
+              <span>a</span>
+              <input id="a" type="number" inputmode="numeric" min="0" step="1" value="12" />
+            </label>
+            <label class="cell-input">
+              <span>b</span>
+              <input id="b" type="number" inputmode="numeric" min="0" step="1" value="114" />
+            </label>
+
+            <div class="row-header factor-no">Categoría inferior</div>
+            <label class="cell-input">
+              <span>c</span>
+              <input id="c" type="number" inputmode="numeric" min="0" step="1" value="110" />
+            </label>
+            <label class="cell-input">
+              <span>d</span>
+              <input id="d" type="number" inputmode="numeric" min="0" step="1" value="8" />
+            </label>
+          </div>
+        </div>
+
+        <div class="options-card">
+          <label class="check-row">
+            <input id="useCorrection" type="checkbox" checked />
+            <span>Aplicar corrección de 0.5 cuando exista alguna celda con cero</span>
+          </label>
+          <p class="muted">La corrección solo se aplica si al menos una celda es cero. Si no hay ceros, los valores originales se conservan.</p>
+        </div>
+
+        <div class="button-row">
+          <button id="exampleProtective" type="button">Ejemplo protector</button>
+          <button id="exampleRisk" type="button" class="secondary">Ejemplo riesgo</button>
+          <button id="exampleExcel" type="button" class="secondary">Ejemplo Excel</button>
+          <button id="clearTable" type="button" class="ghost">Limpiar</button>
+        </div>
+      </section>
+
+      <section class="panel results-panel" aria-labelledby="results-title">
+        <div class="panel-heading">
+          <div class="section-number">02</div>
+          <div>
+            <h2 id="results-title">Resultados</h2>
+            <p>Indicadores calculados en tiempo real.</p>
+          </div>
+        </div>
+
+        <div id="warningBox" class="warning-box hidden"></div>
+
+        <div class="metric-grid">
+          <article class="metric-card primary">
+            <span>Riesgo relativo</span>
+            <strong id="rrValue">—</strong>
+            <small id="rrInterpretation">—</small>
+          </article>
+          <article class="metric-card primary">
+            <span>Odds Ratio</span>
+            <strong id="orValue">—</strong>
+            <small id="orInterpretation">—</small>
+          </article>
+          <article class="metric-card">
+            <span>Riesgo atribuible</span>
+            <strong id="raValue">—</strong>
+            <small id="raInterpretation">—</small>
+          </article>
+          <article class="metric-card">
+            <span>Riesgo categoría superior</span>
+            <strong id="riskExposed">—</strong>
+            <small>a / (a + b)</small>
+          </article>
+          <article class="metric-card">
+            <span>Riesgo categoría inferior</span>
+            <strong id="riskUnexposed">—</strong>
+            <small>c / (c + d)</small>
+          </article>
+          <article class="metric-card">
+            <span>Total observado</span>
+            <strong id="totalObserved">—</strong>
+            <small>a + b + c + d</small>
+          </article>
+        </div>
+
+        <div class="ci-grid">
+          <div class="ci-card">
+            <h3>Intervalos para RR</h3>
+            <div class="ci-row"><span>IC 95 %</span><strong id="rrCi95">—</strong></div>
+            <div class="ci-row"><span>IC 99 %</span><strong id="rrCi99">—</strong></div>
+          </div>
+          <div class="ci-card">
+            <h3>Intervalos para OR</h3>
+            <div class="ci-row"><span>IC 95 %</span><strong id="orCi95">—</strong></div>
+            <div class="ci-row"><span>IC 99 %</span><strong id="orCi99">—</strong></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel interpretation-panel" aria-labelledby="interpretation-title">
+      <div class="panel-heading">
+        <div class="section-number">03</div>
+        <div>
+          <h2 id="interpretation-title">Interpretación epidemiológica</h2>
+          <p>Lectura automática basada en la categoría superior, la categoría inferior y el IC 95 %.</p>
+        </div>
+      </div>
+      <div id="interpretationText" class="interpretation-box">—</div>
+    </section>
+
+    <section class="panel formulas-panel" aria-labelledby="formulas-title">
+      <div class="panel-heading">
+        <div class="section-number">04</div>
+        <div>
+          <h2 id="formulas-title">Fórmulas principales</h2>
+          <p>La matriz se mantiene fija. Solo cambia la forma en que se nombran las categorías.</p>
+        </div>
+      </div>
+
+      <div class="formula-grid">
+        <div class="formula-card">
+          <h3>Estructura fija</h3>
+          <code>a = superior/evento sí; b = superior/evento no; c = inferior/evento sí; d = inferior/evento no</code>
+        </div>
+        <div class="formula-card">
+          <h3>Riesgo relativo</h3>
+          <code>RR = [a / (a + b)] / [c / (c + d)]</code>
+        </div>
+        <div class="formula-card">
+          <h3>Odds Ratio</h3>
+          <code>OR = (a × d) / (b × c)</code>
+        </div>
+        <div class="formula-card">
+          <h3>Riesgo atribuible</h3>
+          <code>RA = [a / (a + b)] − [c / (c + d)]</code>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div>
+      <strong>Epi 2×2</strong> · Laboratorio de Sistemas Porcícolas
+      <br />© 2026 Alberto Jorge Galindo-Barboza. Todos los derechos reservados.
+    </div>
+    <div>
+      Cita sugerida: Galindo-Barboza, A. J. (2026). <em>Epi 2×2: Calculadora epidemiológica para tablas de contingencia</em>.
+      <br /><a href="https://aljogaba.github.io/" target="_blank" rel="noopener">https://aljogaba.github.io/</a>
+    </div>
+  </footer>
+
+  <script src="js/utils/formatters.js"></script>
+  <script src="js/utils/validators.js"></script>
+  <script src="js/modules/epi2x2.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

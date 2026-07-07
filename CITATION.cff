@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Epi 2x2: Calculadora epidemiológica para tablas de contingencia"
+message: "Si utiliza esta herramienta, cite el proyecto como se indica."
+type: software
+authors:
+  - family-names: "Galindo-Barboza"
+    given-names: "Alberto Jorge"
+year: 2026
+version: "0.1.0-dev"
+url: "https://aljogaba.github.io/"

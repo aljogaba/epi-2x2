@@ -1,0 +1,31 @@
+{
+  "examples": [
+    {
+      "name": "Ejemplo Excel original",
+      "factor": "Factor presente",
+      "event": "Enfermedad",
+      "a": 15,
+      "b": 35,
+      "c": 45,
+      "d": 5,
+      "expected": {
+        "RR": 0.3333,
+        "OR": 0.0476,
+        "RA": -0.6,
+        "RR_IC95": [0.2118, 0.5247],
+        "RR_IC99": [0.1835, 0.6056],
+        "OR_IC95": [0.0158, 0.1437],
+        "OR_IC99": [0.0111, 0.2038]
+      }
+    },
+    {
+      "name": "Ejemplo factor de riesgo",
+      "factor": "Sin control de acceso",
+      "event": "Granja positiva",
+      "a": 38,
+      "b": 12,
+      "c": 18,
+      "d": 32
+    }
+  ]
+}
