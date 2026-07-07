@@ -25,5 +25,11 @@ const EpiFormatters = (() => {
     return `${number(low, decimals)} – ${number(high, decimals)}`;
   }
 
-  return { number, count, percent, interval };
+  function pValue(value) {
+    if (!Number.isFinite(value)) return "—";
+    if (value < 0.0001) return "< 0.0001";
+    return number(value, 4);
+  }
+
+  return { number, count, percent, interval, pValue };
 })();

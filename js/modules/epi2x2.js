@@ -49,6 +49,8 @@ const Epi2x2 = (() => {
     const orCi95 = confidenceInterval(or, seOR, Z95);
     const orCi99 = confidenceInterval(or, seOR, Z99);
 
+    const chiSquare = calculateChiSquare(rawTable);
+
     return {
       rawTable,
       table: t,
@@ -65,7 +67,8 @@ const Epi2x2 = (() => {
       rrCi99,
       orCi95,
       orCi99,
-      interpretation: interpret(rr, rrCi95, or, orCi95, ra)
+      chiSquare,
+      interpretation: interpret(rr, rrCi95, or, orCi95, ra, chiSquare)
     };
   }
 
@@ -84,7 +87,7 @@ const Epi2x2 = (() => {
     return Number.isFinite(ci.low) && Number.isFinite(ci.high) && ci.low <= 1 && ci.high >= 1;
   }
 
-  function interpret(rr, rrCi95, or, orCi95, ra) {
+  function interpret(rr, rrCi95, or, orCi95, ra, chiSquare) {
     const rrIncludesOne = intervalIncludesOne(rrCi95);
     const orIncludesOne = intervalIncludesOne(orCi95);
 
@@ -121,6 +124,81 @@ const Epi2x2 = (() => {
       raText
     };
   }
+
+
+
+  function calculateChiSquare(rawTable) {
+    const a = rawTable.a;
+    const b = rawTable.b;
+    const c = rawTable.c;
+    const d = rawTable.d;
+    const row1 = a + b;
+    const row2 = c + d;
+    const col1 = a + c;
+    const col2 = b + d;
+    const total = row1 + row2;
+    const denominator = row1 * row2 * col1 * col2;
+
+    if (total <= 0 || denominator === 0) {
+      return {
+        value: NaN,
+        pValue: NaN,
+        df: 1,
+        significant05: false,
+        expected: { a: NaN, b: NaN, c: NaN, d: NaN },
+        minExpected: NaN,
+        valid: false
+      };
+    }
+
+    const expected = {
+      a: row1 * col1 / total,
+      b: row1 * col2 / total,
+      c: row2 * col1 / total,
+      d: row2 * col2 / total
+    };
+
+    const numerator = total * Math.pow((a * d) - (b * c), 2);
+    const value = numerator / denominator;
+    const pValue = chiSquare1Survival(value);
+    const minExpected = Math.min(expected.a, expected.b, expected.c, expected.d);
+
+    return {
+      value,
+      pValue,
+      df: 1,
+      significant05: Number.isFinite(pValue) && pValue < 0.05,
+      expected,
+      minExpected,
+      valid: true
+    };
+  }
+
+  function chiSquare1Survival(x) {
+    if (!Number.isFinite(x) || x < 0) return NaN;
+    return erfc(Math.sqrt(x / 2));
+  }
+
+  function erfc(x) {
+    // Complementary error function approximation. Accurate enough for UI-level p-values.
+    const z = Math.abs(x);
+    const t = 1 / (1 + z / 2);
+    const r = t * Math.exp(
+      -z * z - 1.26551223 +
+      t * (1.00002368 +
+      t * (0.37409196 +
+      t * (0.09678418 +
+      t * (-0.18628806 +
+      t * (0.27886807 +
+      t * (-1.13520398 +
+      t * (1.48851587 +
+      t * (-0.82215223 +
+      t * 0.17087277))))))))
+    );
+    return x >= 0 ? r : 2 - r;
+  }
+
+
 
   return { calculate };
 })();

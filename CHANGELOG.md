@@ -2,6 +2,17 @@
 
 Todos los cambios importantes de Epi 2×2 serán documentados en este archivo.
 
+## [0.3.0-dev] - En desarrollo
+
+### Agregado
+
+- Módulo de prueba de asociación mediante chi cuadrada de Pearson para tablas 2 × 2.
+- Valor p aproximado para gl = 1.
+- Frecuencias esperadas bajo independencia.
+- Decisión automática: asociación significativa / no significativa al nivel 0.05.
+- Advertencia cuando alguna frecuencia esperada es menor de 5.
+- Nota de integración: la corrección 0.5 aplica a RR/OR cuando hay ceros, mientras que chi cuadrada usa conteos observados.
+
 ## [0.2.0-dev] - En desarrollo
 
 ### Agregado

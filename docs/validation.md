@@ -29,3 +29,17 @@ La versión `v0.2.0-dev` conserva la matriz fija:
 - d = categoría inferior / evento no.
 
 La mejora de esta versión es conceptual e interpretativa: la herramienta ya no asume que la variable capturada es siempre factor de riesgo; ahora interpreta la categoría superior contra la inferior.
+
+
+## Validación del módulo chi cuadrada
+
+La versión `v0.3.0-dev` agrega chi cuadrada de Pearson para tablas 2 × 2.
+
+Para tablas con conteos suficientes, se reporta:
+
+- χ² de Pearson.
+- Valor p para gl = 1.
+- Frecuencias esperadas bajo independencia.
+- Advertencia si alguna esperada es menor de 5.
+
+La corrección de 0.5 para celdas con cero se mantiene restringida a RR/OR e intervalos. La prueba de chi cuadrada usa conteos observados.

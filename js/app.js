@@ -54,6 +54,7 @@ function update() {
 
   renderWarnings(table, result, useCorrection);
   renderResults(result);
+  renderChiSquare(result);
   renderInterpretation(result, labels);
 }
 
@@ -100,6 +101,54 @@ function renderResults(result) {
   document.getElementById("raInterpretation").textContent = result.ra > 0 ? "Mayor riesgo absoluto" : result.ra < 0 ? "Menor riesgo absoluto" : "Sin diferencia";
 }
 
+
+function renderChiSquare(result) {
+  const f = EpiFormatters;
+  const chi = result.chiSquare;
+  const warning = document.getElementById("chiWarning");
+  const decisionCard = document.getElementById("chiDecisionCard");
+
+  document.getElementById("chi2Value").textContent = f.number(chi.value, 4);
+  document.getElementById("chiPValue").textContent = f.pValue(chi.pValue);
+  document.getElementById("chiDf").textContent = chi.df || 1;
+  document.getElementById("expectedA").textContent = f.number(chi.expected.a, 2);
+  document.getElementById("expectedB").textContent = f.number(chi.expected.b, 2);
+  document.getElementById("expectedC").textContent = f.number(chi.expected.c, 2);
+  document.getElementById("expectedD").textContent = f.number(chi.expected.d, 2);
+
+  decisionCard.classList.remove("significant", "not-significant", "warning");
+
+  if (!chi.valid) {
+    document.getElementById("chiDecision").textContent = "No calculable";
+    document.getElementById("chiDecisionNote").textContent = "Revise filas y columnas con total cero.";
+    decisionCard.classList.add("warning");
+  } else if (chi.significant05) {
+    document.getElementById("chiDecision").textContent = "Asociación significativa";
+    document.getElementById("chiDecisionNote").textContent = "p < 0.05; continúe con RR/OR e interpretación.";
+    decisionCard.classList.add("significant");
+  } else {
+    document.getElementById("chiDecision").textContent = "No significativa";
+    document.getElementById("chiDecisionNote").textContent = "p ≥ 0.05; interprete RR/OR con cautela.";
+    decisionCard.classList.add("not-significant");
+  }
+
+  const messages = [];
+  if (chi.valid && chi.minExpected < 5) {
+    messages.push(`Al menos una frecuencia esperada es menor de 5 (${f.number(chi.minExpected, 2)}). Para muestras pequeñas conviene considerar prueba exacta de Fisher.`);
+  }
+  if (result.corrected) {
+    messages.push("Nota: RR/OR e intervalos usaron corrección 0.5 por celda cero; la chi cuadrada se calculó con los conteos observados originales.");
+  }
+
+  if (messages.length === 0) {
+    warning.classList.add("hidden");
+    warning.innerHTML = "";
+  } else {
+    warning.classList.remove("hidden");
+    warning.innerHTML = messages.join("<br>");
+  }
+}
+
 function magnitudeText(value) {
   if (!Number.isFinite(value)) return "No calculable";
   if (value > 1) return "Mayor que 1";
@@ -119,6 +168,13 @@ function renderInterpretation(result, labels) {
   let className = "neutral";
   let lead = "Sin asociación concluyente";
   let summary = "";
+
+  const chi = result.chiSquare;
+  const significantText = chi.valid
+    ? (chi.significant05
+      ? "La prueba de chi cuadrada indica asociación estadísticamente significativa al nivel 0.05."
+      : "La prueba de chi cuadrada no muestra asociación estadísticamente significativa al nivel 0.05; interprete las medidas de efecto con cautela.")
+    : "La prueba de chi cuadrada no pudo calcularse por totales marginales insuficientes.";
 
   if (direction === "risk") {
     className = "danger";
@@ -141,6 +197,7 @@ function renderInterpretation(result, labels) {
       <div><strong>OR</strong><span>${or}</span></div>
       <div><strong>Diferencia absoluta</strong><span>${ra}</span></div>
     </div>
+    <p class="muted"><strong>Prueba de asociación:</strong> ${significantText}</p>
     <p class="muted">Nota crítica: la calculadora no decide si la variable es riesgo o protección por su nombre; interpreta la <strong>categoría superior</strong> contra la <strong>categoría inferior</strong>. Revise la codificación antes de concluir causalidad.</p>
   `;
 }

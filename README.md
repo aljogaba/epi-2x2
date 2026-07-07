@@ -11,13 +11,15 @@ La herramienta permite estimar:
 - Riesgo atribuible (RA)
 - Intervalos de confianza al 95 % y 99 %
 - Interpretación básica de asociación epidemiológica
+- Prueba de chi cuadrada de Pearson para asociación
+- Frecuencias esperadas e indicador de validez para muestras pequeñas
 - Codificación explícita de categoría superior e inferior para evitar confusión entre factores de riesgo y factores protectores
 
 El proyecto forma parte del **Laboratorio de Sistemas Porcícolas**, ecosistema de herramientas técnico-científicas para producción, sanidad, epidemiología aplicada y toma de decisiones.
 
 ## Estado del proyecto
 
-Versión actual: `v0.2.0-dev`
+Versión actual: `v0.3.0-dev`
 
 MVP funcional inicial.
 
