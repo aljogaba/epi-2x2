@@ -15,10 +15,13 @@
         <h1>Epi 2×2</h1>
         <p>Calculadora epidemiológica para tablas de contingencia</p>
       </div>
-      <div class="author-block">
-        <span>Autor</span>
-        <strong>Alberto Jorge Galindo-Barboza</strong>
-        <a href="https://aljogaba.github.io/" target="_blank" rel="noopener">Perfil profesional</a>
+      <div class="header-actions">
+        <a class="profile-button" href="https://aljogaba.github.io/" target="_blank" rel="noopener">Perfil profesional</a>
+        <div class="version-pill"><span>Versión</span><strong>0.4.0-dev</strong></div>
+        <div class="author-block">
+          <span>Autor</span>
+          <strong>Alberto Jorge Galindo-Barboza</strong>
+        </div>
       </div>
     </div>
   </header>
@@ -26,7 +29,7 @@
   <main class="app-shell">
     <section class="hero-card">
       <div>
-        <span class="tag">v0.3.0-dev</span>
+        <span class="tag">v0.4.0-dev</span>
         <h2>Medidas de asociación y riesgo en una tabla 2 × 2</h2>
         <p>
           Captura los cuatro conteos de una tabla de contingencia para estimar riesgo relativo,
@@ -40,8 +43,20 @@
       </div>
     </section>
 
+    <div class="app-layout">
+      <aside class="side-nav" aria-label="Menú de navegación">
+        <div class="side-nav-title">Contenido</div>
+        <a href="#entradas"><span>01</span> Entradas</a>
+        <a href="#resultados"><span>02</span> Resultados</a>
+        <a href="#asociacion"><span>03</span> Asociación</a>
+        <a href="#visualizacion"><span>04</span> Visualización</a>
+        <a href="#interpretacion"><span>05</span> Interpretación</a>
+        <a href="#reporte"><span>06</span> Reporte</a>
+        <a href="#formulas"><span>07</span> Fórmulas</a>
+      </aside>
+      <div class="content-stack">
     <section class="workspace-grid">
-      <section class="panel input-panel" aria-labelledby="input-title">
+      <section id="entradas" class="panel input-panel nav-target" aria-labelledby="input-title">
         <div class="panel-heading">
           <div class="section-number">01</div>
           <div>
@@ -126,12 +141,11 @@
         <div class="button-row">
           <button id="exampleProtective" type="button">Ejemplo protector</button>
           <button id="exampleRisk" type="button" class="secondary">Ejemplo riesgo</button>
-          <button id="exampleExcel" type="button" class="secondary">Ejemplo Excel</button>
           <button id="clearTable" type="button" class="ghost">Limpiar</button>
         </div>
       </section>
 
-      <section class="panel results-panel" aria-labelledby="results-title">
+      <section id="resultados" class="panel results-panel nav-target" aria-labelledby="results-title">
         <div class="panel-heading">
           <div class="section-number">02</div>
           <div>
@@ -191,7 +205,7 @@
     </section>
 
 
-    <section class="panel association-panel" aria-labelledby="association-title">
+    <section id="asociacion" class="panel association-panel nav-target" aria-labelledby="association-title">
       <div class="panel-heading">
         <div class="section-number">03</div>
         <div>
@@ -232,9 +246,53 @@
       </div>
     </section>
 
-    <section class="panel interpretation-panel" aria-labelledby="interpretation-title">
+    <section id="visualizacion" class="panel visualization-panel nav-target" aria-labelledby="visualization-title">
       <div class="panel-heading">
         <div class="section-number">04</div>
+        <div>
+          <h2 id="visualization-title">Visualización epidemiológica</h2>
+          <p>Lectura gráfica de asociación, dirección, magnitud y distribución observada.</p>
+        </div>
+      </div>
+
+      <div class="decision-strip" id="decisionStrip">
+        <article><span>Asociación</span><strong id="decisionAssociation">—</strong><small id="decisionAssociationNote">—</small></article>
+        <article><span>Dirección</span><strong id="decisionDirection">—</strong><small>Categoría superior vs inferior</small></article>
+        <article><span>Magnitud</span><strong id="decisionMagnitude">—</strong><small>Basada en RR</small></article>
+        <article><span>Precisión</span><strong id="decisionPrecision">—</strong><small>IC 95 % del RR</small></article>
+      </div>
+
+      <div class="visual-grid">
+        <article class="visual-card forest-card">
+          <div class="visual-heading">
+            <h3>Efecto estimado con IC 95 %</h3>
+            <p>La línea vertical representa ausencia de asociación: valor 1.0.</p>
+          </div>
+          <div class="forest-scale"><span>Menor</span><span>1.0</span><span>Mayor</span></div>
+          <div id="forestPlot" class="forest-plot" aria-label="Forest plot de RR y OR"></div>
+        </article>
+
+        <article class="visual-card heatmap-card">
+          <div class="visual-heading">
+            <h3>Distribución observada</h3>
+            <p>Mapa 2 × 2 de frecuencias; la intensidad indica mayor concentración.</p>
+          </div>
+          <div id="heatmap2x2" class="heatmap-2x2"></div>
+        </article>
+
+        <article class="visual-card risk-card">
+          <div class="visual-heading">
+            <h3>Riesgo observado por categoría</h3>
+            <p>Comparación directa de la proporción con evento en cada fila.</p>
+          </div>
+          <div id="riskBars" class="risk-bars"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="interpretacion" class="panel interpretation-panel nav-target" aria-labelledby="interpretation-title">
+      <div class="panel-heading">
+        <div class="section-number">05</div>
         <div>
           <h2 id="interpretation-title">Interpretación epidemiológica</h2>
           <p>Lectura automática basada en la categoría superior, la categoría inferior y el IC 95 %.</p>
@@ -243,9 +301,27 @@
       <div id="interpretationText" class="interpretation-box">—</div>
     </section>
 
-    <section class="panel formulas-panel" aria-labelledby="formulas-title">
+    <section id="reporte" class="panel report-panel nav-target" aria-labelledby="report-title">
       <div class="panel-heading">
-        <div class="section-number">05</div>
+        <div class="section-number">06</div>
+        <div>
+          <h2 id="report-title">Reporte rápido</h2>
+          <p>Salida sencilla, responsiva y en un solo archivo HTML para compartir o guardar.</p>
+        </div>
+      </div>
+      <div class="report-actions">
+        <button id="openReport" type="button">Abrir reporte HTML</button>
+        <button id="downloadReport" type="button" class="secondary">Descargar HTML</button>
+      </div>
+      <div class="report-preview" id="reportPreview">
+        <strong>Reporte listo.</strong>
+        <span>El reporte resume tabla 2×2, RR, OR, RA, χ², interpretación y visualización básica.</span>
+      </div>
+    </section>
+
+    <section id="formulas" class="panel formulas-panel nav-target" aria-labelledby="formulas-title">
+      <div class="panel-heading">
+        <div class="section-number">07</div>
         <div>
           <h2 id="formulas-title">Fórmulas principales</h2>
           <p>La matriz se mantiene fija. Solo cambia la forma en que se nombran las categorías.</p>
@@ -275,6 +351,8 @@
         </div>
       </div>
     </section>
+      </div>
+    </div>
   </main>
 
   <footer class="app-footer">

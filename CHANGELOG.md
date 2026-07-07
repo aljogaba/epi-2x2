@@ -2,37 +2,40 @@
 
 Todos los cambios importantes de Epi 2×2 serán documentados en este archivo.
 
-## [0.3.0-dev] - En desarrollo
+## [0.4.0-dev] - En desarrollo
 
 ### Agregado
 
-- Módulo de prueba de asociación mediante chi cuadrada de Pearson para tablas 2 × 2.
-- Valor p aproximado para gl = 1.
-- Frecuencias esperadas bajo independencia.
-- Decisión automática: asociación significativa / no significativa al nivel 0.05.
-- Advertencia cuando alguna frecuencia esperada es menor de 5.
-- Nota de integración: la corrección 0.5 aplica a RR/OR cuando hay ceros, mientras que chi cuadrada usa conteos observados.
-
-## [0.2.0-dev] - En desarrollo
-
-### Agregado
-
-- Modo básico y modo avanzado para orientar la captura de tablas 2 × 2.
-- Campos separados para evento/enfermedad, variable evaluada, categoría superior y categoría inferior.
-- Nota de codificación para evitar confundir factor de riesgo con práctica protectora.
-- Interpretación automática basada en la categoría superior comparada contra la categoría inferior.
-- Ejemplo protector con desinfección y PRRS.
+- Sección de visualización epidemiológica.
+- Panel de decisión epidemiológica con asociación, dirección, magnitud y precisión.
+- Forest plot simplificado para RR y OR con IC 95 % y línea de referencia en 1.0.
+- Heatmap 2×2 de frecuencias observadas.
+- Comparación gráfica de riesgos absolutos por categoría.
+- Menú lateral de navegación por secciones.
+- Reporte rápido en HTML independiente, responsivo y de un solo archivo.
 
 ### Cambiado
 
-- Se sustituye el lenguaje genérico de “factor/exposición” por “variable evaluada” y “categorías comparadas”.
-- La interpretación ya no asume que toda variable evaluada es un factor de riesgo.
-- Las tarjetas de riesgo se renombran como riesgo de la categoría superior e inferior.
+- Header y footer ajustados para mantener consistencia visual con SIPRO-Porcino.
+- Se retira el botón de “Ejemplo Excel” de la interfaz principal una vez validado.
 
-### Conservado
+## [0.3.0-dev]
 
-- La matriz a-b-c-d permanece fija:
-  - a = categoría superior / evento sí.
-  - b = categoría superior / evento no.
-  - c = categoría inferior / evento sí.
-  - d = categoría inferior / evento no.
+### Agregado
+
+- Prueba de chi cuadrada de Pearson.
+- Valor p y frecuencias esperadas.
+- Decisión automática sobre asociación estadística.
+
+## [0.2.0-dev]
+
+### Agregado
+
+- Clarificación de codificación epidemiológica: variable evaluada, categoría superior e inferior.
+- Modos básico y avanzado.
+
+## [0.1.0-dev]
+
+### Agregado
+
+- MVP funcional con RR, OR, RA e intervalos de confianza.

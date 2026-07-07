@@ -10,41 +10,29 @@ La herramienta permite estimar:
 - Odds Ratio (OR)
 - Riesgo atribuible (RA)
 - Intervalos de confianza al 95 % y 99 %
+- Prueba de chi cuadrada de Pearson
+- Frecuencias esperadas bajo independencia
+- Visualización epidemiológica de efecto y distribución
 - Interpretación básica de asociación epidemiológica
-- Prueba de chi cuadrada de Pearson para asociación
-- Frecuencias esperadas e indicador de validez para muestras pequeñas
-- Codificación explícita de categoría superior e inferior para evitar confusión entre factores de riesgo y factores protectores
 
 El proyecto forma parte del **Laboratorio de Sistemas Porcícolas**, ecosistema de herramientas técnico-científicas para producción, sanidad, epidemiología aplicada y toma de decisiones.
 
 ## Estado del proyecto
 
-Versión actual: `v0.3.0-dev`
+Versión actual: `v0.4.0-dev`
 
-MVP funcional inicial.
+Proyecto en desarrollo.
 
-## Validación inicial
+## Versión 0.4.0-dev
 
-Caso de referencia del Excel fuente:
+Esta versión integra una primera capa de visualización epidemiológica:
 
-| Celda | Valor |
-|---|---:|
-| a | 15 |
-| b | 35 |
-| c | 45 |
-| d | 5 |
-
-Resultados esperados:
-
-| Indicador | Valor |
-|---|---:|
-| RR | 0.3333 |
-| OR | 0.0476 |
-| RA | -0.6000 |
-| IC 95 % RR | 0.2118 – 0.5247 |
-| IC 99 % RR | 0.1835 – 0.6056 |
-| IC 95 % OR | 0.0158 – 0.1437 |
-| IC 99 % OR | 0.0111 – 0.2038 |
+- Forest plot simplificado de RR y OR con IC 95 %.
+- Heatmap 2 × 2 de frecuencias observadas.
+- Comparación de riesgos absolutos por categoría.
+- Panel de decisión epidemiológica.
+- Menú lateral de navegación.
+- Reporte rápido en HTML independiente.
 
 ## Autoría
 
