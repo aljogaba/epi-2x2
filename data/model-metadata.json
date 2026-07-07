@@ -1,0 +1,22 @@
+{
+  "project_name": "Epi 2x2",
+  "full_name": "Calculadora epidemiológica para tablas de contingencia",
+  "version": "0.1.0-dev",
+  "ecosystem": "Laboratorio de Sistemas Porcícolas",
+  "language": "es",
+  "domain": "Epidemiología aplicada",
+  "scope": [
+    "tabla 2x2",
+    "riesgo relativo",
+    "odds ratio",
+    "riesgo atribuible",
+    "intervalos de confianza",
+    "interpretación epidemiológica"
+  ],
+  "development_status": "desarrollo inicial",
+  "source_model": {
+    "type": "Excel privado",
+    "public_repository_included": false,
+    "validation_strategy": "comparación contra casos de referencia generados desde el modelo fuente"
+  }
+}
