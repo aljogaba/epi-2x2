@@ -267,42 +267,95 @@ function renderDecisionStrip(result, labels) {
 function renderForestPlot(result) {
   const container = document.getElementById("forestPlot");
   if (!container) return;
+
   const rows = [
-    { label: "RR", value: result.rr, ci: result.rrCi95 },
-    { label: "OR", value: result.or, ci: result.orCi95 }
+    { label: "RR", fullLabel: "Riesgo relativo", value: result.rr, ci: result.rrCi95 },
+    { label: "OR", fullLabel: "Odds Ratio", value: result.or, ci: result.orCi95 }
   ];
-  const finiteValues = rows.flatMap((row) => [row.value, row.ci.low, row.ci.high]).filter((v) => Number.isFinite(v) && v > 0);
+
+  const finiteValues = rows
+    .flatMap((row) => [row.value, row.ci.low, row.ci.high])
+    .filter((v) => Number.isFinite(v) && v > 0);
+
   if (finiteValues.length === 0) {
     container.innerHTML = `<div class="muted">No hay estimaciones calculables para graficar.</div>`;
     return;
   }
-  const minValue = Math.min(0.1, ...finiteValues) / 1.25;
-  const maxValue = Math.max(10, ...finiteValues) * 1.25;
+
+  const minValue = Math.min(0.1, ...finiteValues) / 1.35;
+  const maxValue = Math.max(10, ...finiteValues) * 1.35;
   const logMin = Math.log(minValue);
   const logMax = Math.log(maxValue);
+
   const pct = (value) => {
     if (!Number.isFinite(value) || value <= 0) return 50;
     const p = ((Math.log(value) - logMin) / (logMax - logMin)) * 100;
     return Math.max(0, Math.min(100, p));
   };
+
   const one = pct(1);
-  container.innerHTML = rows.map((row) => {
+  const tickCandidates = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100];
+  const ticks = tickCandidates.filter((tick) => tick >= minValue && tick <= maxValue);
+  if (!ticks.includes(1) && minValue < 1 && maxValue > 1) ticks.push(1);
+  ticks.sort((a, b) => a - b);
+
+  const tickHtml = ticks.map((tick) => `
+    <span class="forest-tick" style="left:${pct(tick)}%">
+      <i></i><b>${EpiFormatters.number(tick, tick < 1 ? 2 : 1)}</b>
+    </span>
+  `).join("");
+
+  const rowHtml = rows.map((row) => {
     if (!Number.isFinite(row.value) || !Number.isFinite(row.ci.low) || !Number.isFinite(row.ci.high)) {
-      return `<div class="forest-row"><div class="forest-label">${row.label}</div><div class="muted">No calculable</div><div></div></div>`;
+      return `
+        <div class="forest-row enhanced">
+          <div class="forest-measure"><strong>${row.label}</strong><span>${row.fullLabel}</span></div>
+          <div class="muted">No calculable</div>
+          <div class="forest-readout muted">Revise celdas con cero o totales inválidos.</div>
+        </div>`;
     }
     const left = pct(row.ci.low);
     const right = pct(row.ci.high);
     const estimate = pct(row.value);
     const width = Math.max(1, right - left);
+    const crossesOne = row.ci.low <= 1 && row.ci.high >= 1;
+    const direction = row.value > 1 ? "Mayor ocurrencia" : row.value < 1 ? "Menor ocurrencia" : "Sin diferencia";
     return `
-      <div class="forest-row">
-        <div class="forest-label">${row.label}</div>
-        <div class="forest-track" style="--one:${one}%;--ci-left:${left}%;--ci-width:${width}%;--estimate:${estimate}%">
-          <span class="forest-ci"></span><span class="forest-dot"></span>
+      <div class="forest-row enhanced">
+        <div class="forest-measure">
+          <strong>${row.label}</strong>
+          <span>${row.fullLabel}</span>
         </div>
-        <div class="forest-value">${EpiFormatters.number(row.value, 4)} (${EpiFormatters.interval(row.ci.low, row.ci.high, 4)})</div>
+        <div class="forest-track-wrap">
+          <div class="forest-track" style="--one:${one}%;--ci-left:${left}%;--ci-width:${width}%;--estimate:${estimate}%" title="${row.fullLabel}: ${EpiFormatters.number(row.value, 4)}; IC 95 %: ${EpiFormatters.interval(row.ci.low, row.ci.high, 4)}">
+            <span class="forest-ci" aria-label="Intervalo de confianza 95 %"></span>
+            <span class="forest-dot" aria-label="Estimación puntual"></span>
+          </div>
+          <div class="forest-annotations">
+            <span class="ci-low" style="left:${left}%">Límite inf. ${EpiFormatters.number(row.ci.low, 4)}</span>
+            <span class="estimate" style="left:${estimate}%">${row.label} ${EpiFormatters.number(row.value, 4)}</span>
+            <span class="ci-high" style="left:${right}%">Límite sup. ${EpiFormatters.number(row.ci.high, 4)}</span>
+          </div>
+        </div>
+        <div class="forest-readout">
+          <strong>${EpiFormatters.number(row.value, 4)}</strong>
+          <span>IC 95 %: ${EpiFormatters.interval(row.ci.low, row.ci.high, 4)}</span>
+          <small class="${crossesOne ? "neutral" : (row.value > 1 ? "risk" : "protective")}">${crossesOne ? "Cruza 1.0" : direction}</small>
+        </div>
       </div>`;
   }).join("");
+
+  container.innerHTML = `
+    <div class="forest-axis" style="--one:${one}%">
+      <span class="null-line-label" style="left:${one}%">1.0 · sin asociación</span>
+      ${tickHtml}
+    </div>
+    ${rowHtml}
+    <div class="forest-caption">
+      <span><b>Punto:</b> estimación puntual</span>
+      <span><b>Barra:</b> intervalo de confianza al 95 %</span>
+      <span><b>Línea 1.0:</b> ausencia de asociación</span>
+    </div>`;
 }
 
 function renderHeatmap(result, labels) {
@@ -358,7 +411,7 @@ function buildReportHtml(result, labels) {
     <section class="card"><h2>Tabla 2 × 2</h2><table><tr><th></th><th>${labels.eventName}: sí</th><th>${labels.eventName}: no</th></tr><tr><th>${labels.upperCategory}</th><td>${f.count(result.rawTable.a)}</td><td>${f.count(result.rawTable.b)}</td></tr><tr><th>${labels.lowerCategory}</th><td>${f.count(result.rawTable.c)}</td><td>${f.count(result.rawTable.d)}</td></tr></table></section>
     <section class="card"><h2>Resultados principales</h2><div class="grid"><div class="metric"><span>RR</span><strong>${f.number(result.rr,4)}</strong></div><div class="metric"><span>OR</span><strong>${f.number(result.or,4)}</strong></div><div class="metric"><span>RA</span><strong>${f.percent(result.ra,2)}</strong></div><div class="metric"><span>IC 95 % RR</span><strong>${f.interval(result.rrCi95.low,result.rrCi95.high,4)}</strong></div><div class="metric"><span>IC 95 % OR</span><strong>${f.interval(result.orCi95.low,result.orCi95.high,4)}</strong></div><div class="metric"><span>χ² / p</span><strong>${f.number(result.chiSquare.value,4)} / ${f.pValue(result.chiSquare.pValue)}</strong></div></div></section>
     <section class="card"><h2>Decisión e interpretación</h2><p><strong>Prueba de asociación:</strong> ${chiDecision}</p><p><strong>Dirección:</strong> ${direction}</p><p class="note">La interpretación depende de la codificación de la categoría superior contra la categoría inferior. Este reporte no establece causalidad por sí solo.</p></section>
-    <section class="footer">© 2026 Alberto Jorge Galindo-Barboza. Todos los derechos reservados. Perfil profesional: https://aljogaba.github.io/ · Generado: ${date}</section>
+    <section class="footer"><strong>Epi 2×2 · Laboratorio de Sistemas Porcícolas</strong><br>© 2026 Alberto Jorge Galindo-Barboza. Todos los derechos reservados. Perfil profesional: https://aljogaba.github.io/ · Generado: ${date}</section>
   </main></body></html>`;
 }
 

@@ -19,11 +19,11 @@ El proyecto forma parte del **Laboratorio de Sistemas Porcícolas**, ecosistema 
 
 ## Estado del proyecto
 
-Versión actual: `v0.4.0-dev`
+Versión actual: `v0.4.1-dev`
 
 Proyecto en desarrollo.
 
-## Versión 0.4.0-dev
+## Versión 0.4.1-dev
 
 Esta versión integra una primera capa de visualización epidemiológica:
 

@@ -2,7 +2,7 @@
 
 Todos los cambios importantes de Epi 2×2 serán documentados en este archivo.
 
-## [0.4.0-dev] - En desarrollo
+## [0.4.1-dev] - En desarrollo
 
 ### Agregado
 
