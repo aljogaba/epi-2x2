@@ -25,8 +25,8 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background: radial-gradient(circle at top left, #dcebe6 0, var(--bg) 35%, #f4f7f5 100%);
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.47;
 }
 
 .app-header {
@@ -40,7 +40,7 @@ body {
 }
 
 .header-inner {
-  max-width: 1180px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 14px 24px;
   display: flex;
@@ -60,7 +60,7 @@ body {
 
 .brand-block h1 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.64rem;
   letter-spacing: -0.03em;
 }
 
@@ -88,9 +88,9 @@ body {
 .author-block a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 
 .app-shell {
-  max-width: 1180px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 28px 24px 46px;
+  padding: 24px 22px 42px;
 }
 
 .hero-card,
@@ -102,7 +102,7 @@ body {
 }
 
 .hero-card {
-  padding: 26px;
+  padding: 22px;
   display: grid;
   grid-template-columns: 1fr minmax(220px, 300px);
   gap: 24px;
@@ -124,7 +124,7 @@ body {
 
 .hero-card h2 {
   margin: 0 0 8px;
-  font-size: 1.65rem;
+  font-size: 1.52rem;
   letter-spacing: -0.03em;
 }
 
@@ -142,7 +142,7 @@ body {
 .workspace-grid {
   display: grid;
   grid-template-columns: minmax(360px, 0.9fr) minmax(420px, 1.1fr);
-  gap: 22px;
+  gap: 20px;
   align-items: start;
 }
 
@@ -190,7 +190,7 @@ input[type="text"], input[type="number"] {
   width: 100%;
   border: 1px solid #cbd8d3;
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 9px 11px;
   font: inherit;
   color: var(--ink);
   background: #fff;
@@ -576,7 +576,7 @@ code {
   background: linear-gradient(135deg, rgba(15,61,54,.98), rgba(10,50,44,.98));
 }
 .header-inner {
-  padding: 11px 24px;
+  padding: 10px 22px;
 }
 .brand-block h1 { font-size: 1.62rem; }
 .brand-block p { font-size: .88rem; }
@@ -608,7 +608,7 @@ code {
 .app-layout {
   display: grid;
   grid-template-columns: 210px minmax(0,1fr);
-  gap: 22px;
+  gap: 20px;
   align-items: start;
 }
 .content-stack { min-width: 0; }
@@ -927,7 +927,7 @@ code {
 .forest-measure strong {
   display: block;
   color: var(--accent);
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   line-height: 1;
 }
 .forest-measure span {
@@ -1077,4 +1077,267 @@ code {
   .forest-row.enhanced { grid-template-columns: 1fr; gap: 8px; }
   .forest-readout { grid-column: auto; }
   .forest-annotations span { font-size: 0.62rem; padding: 2px 5px; }
+}
+
+
+/* v0.4.2 — Pulido final: notación científica, forest plot limpio y escala compacta */
+:root {
+  --radius: 18px;
+}
+.panel { border-radius: var(--radius); }
+.hero-card { border-radius: var(--radius); }
+.section-number {
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+  border-radius: 13px;
+  font-size: 0.92rem;
+}
+.formula-grid.scientific-formulas {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+.formula-card {
+  padding: 16px;
+}
+.formula-card h3 {
+  margin-bottom: 12px;
+}
+.math-lines {
+  display: grid;
+  gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  color: #06362f;
+  font-weight: 800;
+  line-height: 1.45;
+}
+.math-lines.compact {
+  font-size: 0.86rem;
+  gap: 5px;
+}
+.formula-card small {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.forest-row.enhanced {
+  grid-template-columns: 70px minmax(300px, 1fr) 170px;
+  padding: 8px 0 16px;
+}
+.forest-track-wrap {
+  min-height: 78px;
+}
+.forest-annotations.stacked {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  height: auto;
+  margin-top: 8px;
+}
+.forest-annotations.stacked span {
+  position: static;
+  transform: none;
+  display: inline-flex;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 0.66rem;
+  padding: 3px 7px;
+}
+.forest-annotations.stacked .ci-low { justify-self: start; }
+.forest-annotations.stacked .estimate { justify-self: center; }
+.forest-annotations.stacked .ci-high { justify-self: end; }
+.forest-annotations .ci-low,
+.forest-annotations .ci-high,
+.forest-annotations .estimate { top: auto; }
+.forest-readout strong { font-size: 1rem; }
+.forest-readout span { font-size: 0.74rem; }
+.forest-tick { font-size: 0.68rem; }
+.null-line-label { font-size: 0.64rem; }
+
+@media (max-width: 1180px) {
+  .formula-grid.scientific-formulas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .formula-grid.scientific-formulas { grid-template-columns: 1fr; }
+  .forest-annotations.stacked { grid-template-columns: 1fr; }
+  .forest-annotations.stacked .ci-low,
+  .forest-annotations.stacked .estimate,
+  .forest-annotations.stacked .ci-high { justify-self: stretch; }
+}
+
+/* v0.4.3 — Reacomodo de entradas/resultados, fórmulas ampliadas y sin scroll interno */
+body {
+  font-size: 13px;
+}
+.app-shell {
+  max-width: 1188px;
+  padding-top: 20px;
+}
+.hero-card {
+  padding: 18px 20px;
+}
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.entry-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.08fr) minmax(350px, 0.92fr);
+  gap: 16px;
+  align-items: start;
+}
+.entry-main,
+.entry-side,
+.content-stack,
+.formulas-panel,
+.report-panel {
+  min-width: 0;
+  overflow: visible;
+}
+.entry-side .compact-card {
+  margin-bottom: 12px;
+}
+.entry-buttons {
+  margin-top: 4px;
+}
+.input-panel,
+.results-panel,
+.formulas-panel {
+  padding: 20px;
+}
+.two-col-form {
+  gap: 12px;
+}
+label span {
+  font-size: 0.81rem;
+}
+input[type="text"], input[type="number"] {
+  padding: 8px 10px;
+}
+.table-card, .options-card {
+  padding: 12px;
+}
+.table-title {
+  font-size: 0.96rem;
+}
+.contingency-table {
+  grid-template-columns: minmax(96px, 0.95fr) repeat(2, minmax(118px, 1fr));
+}
+.corner, .col-header, .row-header, .cell-input {
+  min-height: 54px;
+}
+.row-header,
+.col-header {
+  font-size: 0.9rem;
+}
+.cell-input { padding: 7px; }
+.button-row button {
+  padding: 9px 12px;
+}
+.results-panel {
+  margin-top: 0;
+}
+.metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.metric-card {
+  min-height: 102px;
+  padding: 13px;
+}
+.metric-card span {
+  font-size: 0.73rem;
+  line-height: 1.2;
+}
+.metric-card strong {
+  font-size: 1.42rem;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.metric-card small {
+  display: block;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.ci-grid {
+  margin-top: 12px;
+  gap: 10px;
+}
+.ci-card {
+  padding: 13px;
+}
+.ci-card h3 {
+  font-size: 0.92rem;
+}
+.ci-row {
+  padding: 7px 0;
+}
+.formulas-panel {
+  overflow: visible;
+}
+.formula-grid.scientific-formulas {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.formula-card {
+  min-height: 100%;
+  padding: 15px;
+}
+.formula-card h3 {
+  font-size: 0.94rem;
+  margin-bottom: 10px;
+}
+.math-lines {
+  font-size: 0.92rem;
+  line-height: 1.42;
+}
+.math-lines.compact {
+  font-size: 0.84rem;
+}
+.formula-card small {
+  font-size: 0.78rem;
+}
+.site-footer {
+  margin-top: 14px;
+}
+
+@media (max-width: 1080px) {
+  .entry-layout {
+    grid-template-columns: 1fr;
+  }
+  .entry-side .button-row {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 980px) {
+  .formula-grid.scientific-formulas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  body {
+    font-size: 12.5px;
+  }
+  .app-shell {
+    padding: 16px 10px 28px;
+  }
+  .hero-card {
+    padding: 16px;
+  }
+  .metric-grid,
+  .ci-grid,
+  .formula-grid.scientific-formulas,
+  .two-col-form {
+    grid-template-columns: 1fr;
+  }
+  .contingency-table {
+    grid-template-columns: 84px repeat(2, minmax(88px, 1fr));
+  }
 }

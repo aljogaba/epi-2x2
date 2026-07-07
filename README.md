@@ -19,20 +19,22 @@ El proyecto forma parte del **Laboratorio de Sistemas Porcícolas**, ecosistema 
 
 ## Estado del proyecto
 
-Versión actual: `v0.4.1-dev`
+Versión actual: `v0.4.3-dev`
 
 Proyecto en desarrollo.
 
-## Versión 0.4.1-dev
+## Versión 0.4.3-dev
 
-Esta versión integra una primera capa de visualización epidemiológica:
+Esta versión consolida la visualización epidemiológica e integra una pulida final de lectura:
 
-- Forest plot simplificado de RR y OR con IC 95 %.
+- Forest plot de RR y OR con IC 95 % y etiquetas no solapadas.
 - Heatmap 2 × 2 de frecuencias observadas.
 - Comparación de riesgos absolutos por categoría.
 - Panel de decisión epidemiológica.
 - Menú lateral de navegación.
 - Reporte rápido en HTML independiente.
+- Fórmulas principales con notación científica más clara.
+- Escala tipográfica y dimensiones ligeramente compactadas para mejorar la visibilidad en pantalla.
 
 ## Autoría
 

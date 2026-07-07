@@ -1,23 +1,21 @@
+## v0.4.3
+- Reacomodo del módulo 01: campos a la izquierda y tabla 2×2 a la derecha para ahorrar espacio vertical.
+- Módulo 02 colocado debajo del módulo 01 para una lectura más limpia.
+- Eliminación de scroll interno en el contenido principal y ampliación visual del bloque de fórmulas.
+- Ajustes finos de tamaño de fuente, tarjetas y etiquetas para mejorar legibilidad.
+
 # Changelog
 
 Todos los cambios importantes de Epi 2×2 serán documentados en este archivo.
 
-## [0.4.1-dev] - En desarrollo
-
-### Agregado
-
-- Sección de visualización epidemiológica.
-- Panel de decisión epidemiológica con asociación, dirección, magnitud y precisión.
-- Forest plot simplificado para RR y OR con IC 95 % y línea de referencia en 1.0.
-- Heatmap 2×2 de frecuencias observadas.
-- Comparación gráfica de riesgos absolutos por categoría.
-- Menú lateral de navegación por secciones.
-- Reporte rápido en HTML independiente, responsivo y de un solo archivo.
+## [0.4.3-dev] - En desarrollo
 
 ### Cambiado
 
-- Header y footer ajustados para mantener consistencia visual con SIPRO-Porcino.
-- Se retira el botón de “Ejemplo Excel” de la interfaz principal una vez validado.
+- Mejora la notación científica de las fórmulas principales.
+- Reduce ligeramente la escala tipográfica y dimensiones generales para visualizar más contenido en pantalla.
+- Corrige el solapamiento de etiquetas en el forest plot, manteniendo etiquetas de estimación e IC 95 %.
+- Conserva el footer homologado con SIPRO-Porcino.
 
 ## [0.3.0-dev]
 

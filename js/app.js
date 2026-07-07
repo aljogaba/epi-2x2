@@ -331,10 +331,10 @@ function renderForestPlot(result) {
             <span class="forest-ci" aria-label="Intervalo de confianza 95 %"></span>
             <span class="forest-dot" aria-label="Estimación puntual"></span>
           </div>
-          <div class="forest-annotations">
-            <span class="ci-low" style="left:${left}%">Límite inf. ${EpiFormatters.number(row.ci.low, 4)}</span>
-            <span class="estimate" style="left:${estimate}%">${row.label} ${EpiFormatters.number(row.value, 4)}</span>
-            <span class="ci-high" style="left:${right}%">Límite sup. ${EpiFormatters.number(row.ci.high, 4)}</span>
+          <div class="forest-annotations stacked">
+            <span class="ci-low">LI ${EpiFormatters.number(row.ci.low, 4)}</span>
+            <span class="estimate">${row.label} ${EpiFormatters.number(row.value, 4)}</span>
+            <span class="ci-high">LS ${EpiFormatters.number(row.ci.high, 4)}</span>
           </div>
         </div>
         <div class="forest-readout">
