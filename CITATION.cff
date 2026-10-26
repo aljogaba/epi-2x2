@@ -6,5 +6,6 @@ authors:
   - family-names: "Galindo-Barboza"
     given-names: "Alberto Jorge"
 year: 2026
-version: "0.3.0-dev"
-url: "https://aljogaba.github.io/"
+version: "0.4.3-dev"
+url: "https://aljogaba.github.io/epi-2x2/"
+repository-code: "https://github.com/aljogaba/epi-2x2"
